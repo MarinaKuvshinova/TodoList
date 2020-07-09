@@ -1,0 +1,1327 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap');
+
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+html, body {
+  font-size: 15px;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font:400 1em/1.2 'Montserrat', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #8893a9;
+}
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+a {
+  text-decoration: none;
+  color: #00b5e2;
+  transition: all .3s ease;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+button {
+  outline: none !important;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus
+//textarea:-webkit-autofill,
+//textarea:-webkit-autofill:hover,
+//textarea:-webkit-autofill:focus,
+//select:-webkit-autofill,
+//select:-webkit-autofill:hover,
+//select:-webkit-autofill:focus {
+{
+  -webkit-box-shadow: inset 0 0 0 50px #fff !important;
+  -webkit-text-fill-color: #a6b4cf !important;
+  color: #a6b4cf !important;
+}
+/*===== Variable ====*/
+$white-text: #a6b4cf;
+$dark-text: #253962;
+$blue-text: #00b5e2;
+
+$box-shadow: 0 0 40px rgba(0, 0, 0, 0.06);
+$border-radius: 10px;
+$white-background: #fcfcfc;
+
+/*===== Mixins ====*/
+@mixin box-overlay($va-side: left) {
+  z-index: 10;
+  background: $white-background;
+  border-radius: $border-radius;
+  box-sizing: border-box;
+  box-shadow: $box-shadow;
+  transition: all .3s ease;
+  position: absolute;
+  top: 100%;
+  margin: 10px 0 0;
+  padding: 15px;
+
+  @if $va-side != left {
+    right: 0;
+  } @else {
+    left: 0;
+  }
+}
+
+@mixin alignment($va-align: center) {
+  display: flex;
+  align-items: center;
+
+  @if $va-align == left {
+    justify-content: left;
+  } @else if $va-align != center {
+    justify-content: space-between;
+  } @else {
+    justify-content: center;
+  }
+}
+
+@mixin no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+@mixin btn($width) {
+  width: $width;
+  position: relative;
+  background: $blue-text;
+  color: #fff;
+  text-align: center;
+  border: 0;
+  transition: all .3s ease;
+  border-radius: 35px;
+  box-shadow: 0 12px 50px rgba(0, 164, 206, 0);
+  cursor: pointer;
+  height: 47px;
+  font-weight: bold;
+  &:hover {
+    background: darken($blue-text, 30%);
+    //  background: #00a4ce;
+    box-shadow: 0 12px 50px rgba(0, 164, 206, 0.35);
+  }
+  &:disabled {
+    cursor: default;
+    box-shadow: 0 12px 50px rgba(0, 164, 206, 0.0);
+    -webkit-box-shadow: 0 12px 50px rgba(0, 164, 206, 0.0);
+    background: #f7f7f7;
+    color: #c4c9d2;
+  }
+}
+
+@mixin cancel() {
+  cursor: pointer;
+  background: none;
+  color: $white-text;
+  transition: all .3s ease;
+  border: 0;
+  &:hover {
+    cursor: pointer;
+    color: $dark-text;
+  }
+}
+
+@mixin task-item() {
+  padding: 15px 0;
+  position: relative;
+  border-top: 1px solid #dcdcdc;
+  background: transparent;
+  transition: all .3s ease;
+  @include alignment(left);
+}
+
+@mixin mq($from) {
+  @media (max-width: $from) {
+    @content;
+  }
+}
+
+@mixin input($height) {
+  height: $height;
+  overflow: hidden;
+  border: 1px solid #d8e2e9;
+  border-width: 0 0 1px;
+  background: none;
+  width: 100%;
+  display: block;
+  padding: 0;
+  margin: 0;
+  transition: all .3s ease;
+  font-size: 1em;
+  border-radius: 0;
+  outline: none !important;
+  color: $white-text;
+
+  &:hover, &:focus {
+    border-color: $blue-text;
+  }
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active{
+    background: none !important;
+    color: $white-text !important;
+  }
+
+}
+
+@mixin box() {
+  background: $white-background;
+  border-radius: $border-radius;
+  box-sizing: border-box;
+  box-shadow: $box-shadow;
+  transition: all .3s ease;
+}
+/*===== App ====*/
+.App {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 275px auto;
+  grid-template-areas:
+          "header tasks";
+}
+
+/*===== Header ====*/
+.header {
+  width: 275px;
+  min-height: 500px;
+  grid-area: header;
+  background: linear-gradient(to bottom, rgba(239,241,249,1) 0%,rgba(252,252,252,1) 100%);
+  display: grid;
+  grid-template-rows: 20% auto 70px;
+  z-index: 200;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 77px 0 20px 43px;
+
+  &__holder {
+    transition: all .3s ease;
+    padding: 0 10px 0 0;
+    &:after{
+      position: absolute;
+      top: 16px;
+      left: -61px;
+      width: 149px;
+      height: 171px;
+      content: "";
+      background: url('./images/logo.svg') no-repeat;
+      background-size: cover;
+      z-index: 0;
+    }
+  }
+  &__logo {
+    color: $dark-text;
+    font:700 2em/1 "Oswald", sans-serif;
+    text-transform: uppercase;
+    position: relative;
+    align-self: start;
+    margin: 0;
+    z-index: 2;
+    &:before {
+      background: url('./images/logo2.svg') no-repeat;
+      width: 49px;
+      height: 52px;
+      margin: -2px 5px 3px -2px;
+      content: "";
+      display: inline-block;
+      vertical-align: middle;
+      background-size: cover;
+    }
+  }
+  &__catalog {
+    position: relative;
+    z-index: 2;
+    padding: 0 10px 10px 0;
+    margin: 0 -10px 20px 0;
+    border-bottom: 1px solid #a6b4cf;
+
+    li {
+      padding: 0 0 15px;
+      line-height: 1.5;
+      button {
+        transition: all .3s ease;
+        @include alignment(left);
+        @include no-select;
+        align-items: center;
+        color: $white-text;
+        border: 0;
+        background: none;
+        cursor: pointer;
+        outline: none;
+        &:hover{
+          color: $blue-text;
+        }
+      }
+      svg {
+        width: 20px;
+        height: 20px;
+        margin: -2px 5px 0 0;
+      }
+      &.active {
+         button  {
+           font-weight: 600;
+           color: $blue-text;
+         }
+      }
+    }
+
+  }
+  &__project {
+    transition: all .3s ease;
+    position: relative;
+    &-title {
+      color: $dark-text;
+      text-transform: uppercase;
+      font: 700 1.3em/1 "Oswald", sans-serif;
+      margin: 0 0 15px;
+      cursor: pointer;
+
+      @include alignment(left);
+      svg {
+        width: 15px;
+        height: 15px;
+        margin: 0 5px 0 0;
+        transition: all .3s ease;
+        transform: rotate(180deg);
+
+        &.hidden {
+          transform: rotate(0);
+        }
+      }
+    }
+    &-box {
+      ul {
+        .sidebar__project {
+          padding: 5px 0;
+          margin: 5px 0;
+          position: relative;
+          @include alignment("");
+
+          &-delete {
+            opacity: 0;
+            background: none;
+            padding: 0;
+            border: 0;
+            color: $white-text;
+            outline: none !important;
+          }
+
+          &.active{
+            .sidebar__project-name {
+              color: $blue-text;
+              font-weight: 600;
+            }
+          }
+
+          .project-delete-modal{
+            @include box-overlay(right);
+            p {
+              margin: 0 0 15px;
+              font-weight: 600;
+            }
+            button {
+              @include btn(85px);
+              height: 30px;
+              margin: 0 10px 0 0;
+            }
+            span {
+              @include cancel;
+            }
+          }
+        }
+        .sidebar__project:hover, .sidebar__project.active {
+          cursor: pointer;
+          .sidebar__project-delete {
+            opacity: .6;
+            &:hover {
+              cursor: pointer;
+            }
+          }
+        }
+      }
+
+      .add-project {
+        margin: 20px -10px 10px 0;
+        padding: 15px 10px 0 0;
+        border-top: 1px solid #a6b4cf;
+        @include alignment(left);
+        color: $dark-text;
+        font-size: .9em;
+        min-height: 96px;
+        box-sizing: border-box;
+        &__title {
+          align-self: flex-start;
+          @include alignment(left);
+        }
+
+        &__text{
+          &:hover{
+            cursor: pointer;
+          }
+        }
+        &__plus {
+          height: 15px;
+          &:hover{
+            cursor: pointer;
+          }
+        }
+        svg {
+          width: 15px;
+          height: 15px;
+          margin: 0 5px 0 0;
+        }
+        &__submit {
+          @include btn(105px);
+          height: 30px;
+          margin: 0 10px 0 0;
+        }
+        &__cancel {
+          @include cancel;
+        }
+        &__input{
+          width: 100%;
+          box-sizing: border-box;
+          padding: 0 0 0 10px;
+          input {
+            @include input(30px);
+            margin: 0 0 20px;
+          }
+        }
+      }
+    }
+    &-no {
+      min-height: 80px;
+      position: relative;
+      @include alignment();
+      font-weight: 600;
+      text-align: center;
+      span {
+        color: $dark-text;
+        padding: 12px 0 0;
+      }
+      svg {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        top: calc(50% - 40px);
+        left: calc(50% - 40px);
+        opacity: .08;
+      }
+    }
+  }
+  &__user {
+    @include alignment(left);
+    &-picture {
+      overflow: hidden;
+      width: 49px;
+      max-width: 49px;
+      height: 49px;
+      background: rgba(166,180,207, .3);
+      border-radius: $border-radius;
+      margin: 0 15px 0 0;
+      flex: 1 0 auto;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    &-text {
+      @include alignment(left);
+      flex-wrap: wrap;
+      strong {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 120px;
+        color: $dark-text;
+        font-weight: 600;
+        display: block;
+      }
+      button {
+        @include btn(30px);
+        height: 30px;
+        border-radius: 50%;
+        background: none;
+        color: $white-text;
+        margin: 0 0  0 5px;
+        &:hover {
+          color: #fff;
+          background: $white-text;
+        }
+      }
+      &-email {
+        width: 100%;
+        color: $white-text;
+        font-size: .7em;
+      }
+    }
+  }
+}
+
+/*===== Header_top ====*/
+.header_top {
+  background: #fff;
+  box-shadow: $box-shadow;
+  z-index: 400;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 275px;
+  padding: 20px 50px;
+  color: $dark-text;
+  @include alignment('');
+
+  &-out {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transition: all .3s ease;
+    &:hover {
+      opacity: .7;
+    }
+  }
+
+  h1{
+    font: 700 2em/1 "Oswald", sans-serif;
+    margin: 0;
+    padding: 0 10px 0 0;
+    color: $dark-text;
+  }
+  .settings {
+    position: relative;
+    ul {
+      @include alignment(left);
+      li {
+        margin: 0 0 0 5px;
+        transition: all .3s ease;
+        color: $white-text;
+        svg {
+          width: 15px;
+          height: 15px;
+        }
+        &:hover {
+          cursor: pointer;
+          color: $blue-text;
+        }
+      }
+    }
+    .add-task {
+      width: 200px;
+      opacity: 0;
+      @include box-overlay(right);
+
+      &.add-task__overlay {
+        opacity: 1;
+      }
+      &__heading {
+        margin: 0 0 15px;
+        display: block;
+        font: 400 1.2em/1 "Oswald", sans-serif;
+      }
+      &__cancel-x {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        color: $dark-text;
+        cursor: pointer;
+
+        svg {
+          width: 17px;
+          height: 17px;
+        }
+      }
+      &__content {
+        margin: 0 0 15px;
+        @include input(30px);
+      }
+      &__button-row{
+        padding: 10px 0 0;
+        @include alignment(space-between);
+        justify-content: flex-end;
+        button {
+          font-size: .9em;
+          @include btn(110px);
+          height: 30px;
+          margin: 0 !important;
+          padding: 0;
+        }
+      }
+    }
+  }
+}
+
+
+
+/*===== tasks ====*/
+.tasks {
+  padding: 90px 20px 0;
+  position: relative;
+  grid-area: tasks;
+  &__list {
+    @include box;
+    padding:  0 20px;
+    margin: 0 0 20px;
+    &__task {
+      &-important {
+        margin: 0 0 0 auto;
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+      &-message {
+        display: block;
+        width: 100%;
+        margin: 10px 0 0;
+       font-size: .8em;
+        opacity: .8;
+        strong {
+          font-weight: 600;
+          color: $dark-text;
+        }
+      }
+      &-text {
+        span {
+          display: block;
+          svg {
+            cursor: pointer;
+            &.active {
+              fill: $blue-text;
+            }
+          }
+        }
+        .date {
+          font-weight: 300;
+          color: $dark-text;
+          padding: 5px 0 0;
+          opacity: .5;
+          font-size: .8em;
+        }
+      }
+      &-info {
+        margin: 0 0 0 auto;
+        @include alignment(rigth);
+      }
+
+      &__avatars {
+        margin: 0 0 0 auto;
+
+        &-row {
+
+          padding: 3px 0;
+          @include alignment(left);
+          .picture {
+            background: rgba(166, 180, 207, 0.3);
+            width: 25px;
+            height: 25px;
+            border-radius: 10px;
+            overflow: hidden;
+            img {
+              object-fit: cover;
+              width: 100%;
+              height: 100%;
+            }
+          }
+          .text{
+            font-size: .8em;
+            padding: 0 0 0 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 65px;
+          }
+        }
+      }
+
+    }
+
+    li {
+      @include task-item;
+      &:first-child {
+        border: 0;
+      }
+      &.expired {
+        color: red;
+        .checkbox {
+          border-color: red;
+        }
+      }
+      .checkbox {
+        width: 15px;
+        height: 15px;
+        border: 1px solid $white-text;
+        border-radius: 50%;
+        margin: 0 10px 0 0;
+        cursor: pointer;
+        transition: all .3s ease;
+
+        &:hover {
+          border-color: $blue-text;
+        }
+      }
+    }
+    &-delete {
+      margin: 0 0 0 auto;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: $white-text;
+      transition: all .3s ease;
+
+      &:hover {
+        cursor: pointer;
+        color: $blue-text;
+      }
+    }
+  }
+  &__row-header {
+    position: relative;
+    @include alignment();
+    justify-content: space-between;
+    margin: 0 0 20px;
+
+    .add-task__user {
+      font-size: 20px;
+      cursor: pointer;
+      &:hover {
+        color: $blue-text;
+      }
+    }
+    .project-overlay {
+      bottom: auto;
+      right: auto;
+      left: 0;
+
+      &__search-user {
+        margin: 0 0 10px;
+      }
+      input[type='text'] {
+        height: 35px;
+        overflow: hidden;
+        border: 1px solid #d8e2e9;
+        border-width: 0 0 1px;
+        background: none;
+        width: 100%;
+        display: block;
+        padding: 0;
+        transition: all .3s ease;
+        font-size: 1em;
+        border-radius: 0;
+        outline: none !important;
+        color: #a6b4cf;
+        margin: 0;
+      }
+    }
+  }
+  &__sort {
+    @include alignment();
+    justify-content: flex-end;
+    margin: 0 0 0 auto;
+    &-title {
+      padding: 0 10px 0 0;
+    }
+    .css-2b097c-container {
+      width: 125px;
+      font-size: .85em;
+    }
+  }
+  &-done {
+    opacity: .5;
+  }
+  .add-task {
+    padding: 20px;
+    @include box;
+
+    &__shallow {
+      @include alignment(left);
+      display: inline-flex;
+      transition: all .3s ease;
+      &:hover {
+        color: $blue-text;
+        cursor: pointer;
+      }
+    }
+
+    &__plus {
+      margin: 0 10px 0 0;
+      height: 15px;
+      svg {
+        width: 15px;
+        height: 15px;
+      }
+    }
+    input {
+      @include input(35px);
+      margin: 0;
+    }
+    &__button-row {
+      padding: 15px 0 0;
+      @include alignment(left);
+       > button {
+        @include btn(150px);
+        height: 40px;
+        margin: 0 10px 0 0;
+      }
+      > ul {
+        margin: 0 0 0 auto;
+        @include alignment(left);
+         > li {
+          margin: 0 0 0 10px;
+          position: relative;
+          transition: all .3s ease;
+           &.active > span {
+             color: $blue-text;
+           }
+
+          svg {
+            width: 18px;
+            height: 18px;
+          }
+          &:hover {
+            > span {
+              color: $blue-text;
+              cursor: pointer;
+            }
+          }
+
+           li {
+             &:hover {
+               cursor: pointer;
+               color: $blue-text;
+             }
+           }
+
+
+        }
+      }
+    }
+    &__cancel {
+      @include cancel();
+    }
+  }
+  &-no {
+    min-height: 300px;
+    position: relative;
+    @include alignment();
+    font-weight: 600;
+    align-items: flex-start;
+    text-align: center;
+    span {
+      color: $dark-text;
+      padding: 12px 0 0;
+    }
+    svg {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      top: calc(50% - 100px);
+      left: calc(50% - 100px);
+      opacity: .08;
+    }
+  }
+}
+
+.task-date__list,
+.project-overlay,
+.task-message{
+  width: 250px;
+  @include box-overlay(right);
+  top: auto;
+  bottom: 100%;
+  margin: 0 0 10px;
+}
+.task-date__list {
+  li {
+    @include alignment(left);
+    padding: 5px 0;
+    margin: 0;
+    svg {
+      width: 15px;
+      height: 15px;
+      margin: 0 5px 0 0;
+    }
+  }
+}
+.project-overlay {
+  &__list{
+    height: 110px;
+    overflow-y: auto;
+    li {
+      @include alignment(left);
+      margin: 10px 0;
+      font-size: .8em;
+      &:hover {
+        cursor: pointer;
+        button {
+          cursor: pointer;
+          color: $blue-text;
+        }
+      }
+      button {
+        margin: 0 0 0 auto;
+        width: 15px;
+        height: 15px;
+        padding: 0;
+        background: none;
+        border: 0;
+        color: $white-text;
+
+        svg {
+          width: 15px !important;
+          height: 15px !important;
+        }
+
+      }
+    }
+    &-avatar {
+      overflow: hidden;
+      width: 20px;
+      max-width: 20px;
+      height: 20px;
+      background: rgba(166, 180, 207, 0.3);
+      border-radius: 50%;
+      margin: 0 8px 0 0;
+      flex: 1 0 auto;
+
+      img {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        object-fit: cover;
+      }
+    }
+  }
+}
+.task-message {
+  textarea {
+    margin: 0 0 10px;
+    border-radius: 10px;
+    height: 100px;
+    resize: none !important;
+    width: 100%;
+    display: block;
+    padding: 5px;
+    outline: none;
+    font-size: .8em;
+    border-color: $white-text;
+  }
+  button {
+    @include btn(60px);
+    height: 25px;
+    font-size: .8em;
+    margin: 0;
+  }
+  .clear {
+    background: $white-text;
+  }
+  &__row{
+    @include alignment(space-between);
+  }
+}
+/*===== Calendar ====*/
+.react-calendar {
+  padding: 0 15px 10px;
+  margin: 0 -15px 10px;
+  border-bottom: 1px solid $white-text;
+  button {
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    outline: none !important;
+  }
+  &__navigation {
+    button {
+      width: 20px;
+      height: 25px;
+      color: $dark-text;
+      font-weight: 600;
+      text-align: center;
+      margin: 0 0 5px
+    }
+  }
+
+  &__month-view {
+    &__weekdays {
+      text-transform: uppercase;
+      color: $blue-text;
+      font-weight: 300;
+      font-size: 0.7em;
+      margin: 0 0 3px;
+
+      &__weekday {
+        text-align: center;
+         abbr {
+           text-decoration: none;
+         }
+      }
+    }
+
+    &__days {
+      color: $dark-text;
+      font-size: .9em;
+      button {
+        height: 25px;
+        &:disabled {
+          cursor: auto;
+          opacity: .3;
+        }
+      }
+      &__day--weekend{
+        color: red;
+      }
+    }
+  }
+  &__tile {
+    &--now {
+      font-weight: 600;
+      color: #fff;
+      background: $blue-text !important;
+      border-radius: 5px;
+    }
+    &--active {
+      font-weight: 600;
+      color: #fff;
+      background: $dark-text !important;
+      border-radius: 5px;
+    }
+  }
+}
+
+/*===== SignIn ====*/
+.login {
+  overflow: hidden;
+  background: url(./images/bg-page_h.jpg) no-repeat 50% 50%;
+  background-size: cover;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  min-height: 100vh;
+  position: relative;
+  &:before {
+    z-index: 0;
+    position: absolute;
+    height: 768px;
+    width: 768px;
+    top: calc(50% - 768px/2);
+    left: calc(50% - 768px/2);
+    background: url("./images/logo.svg") no-repeat 0 50%;
+    background-size: cover;
+    opacity: .3;
+    content: "";
+  }
+
+  &__form {
+    @include box();
+    border-radius: 50px;
+    padding: 5% 8%;
+    place-self: center;
+    width: 60%;
+    position: relative;
+    &__title {
+      text-align: center;
+      margin: 0 0 30px;
+      strong {
+        color: $dark-text;
+        font: 700 2em/1.5 "Oswald", sans-serif;
+        text-transform: uppercase;
+        display: block;
+      }
+      span {
+        display: block;
+        font-weight: 600;
+      }
+    }
+    &__double-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 10%;
+
+    }
+    &__row {
+      z-index: 3;
+      margin: 0 0 15px;
+      position: relative;
+      padding: 25px 0 0;
+
+      label {
+        position: absolute;
+        top: 25px;
+        z-index: 0;
+        left: 0;
+        color: $dark-text;
+        font: 700 1.2/1 "Oswald", sans-serif;
+        display: block;
+        margin: 0 0 5px;
+        transition: all .3s ease;
+
+        &.field-active{
+          top: 0;
+          font-size: .8em;
+        }
+      }
+      input {
+        position: relative;
+        z-index: 2;
+        @include input(20px);
+      }
+      &__eye {
+        z-index: 4;
+        position: absolute;
+        right: 0;
+        top: 25px;
+        background: none;
+        border: 0;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        color: $dark-text;
+        svg {
+          width: 15px;
+          height: 15px;
+        }
+      }
+      .error {
+        color: red;
+        font-size: .8em;
+      }
+    }
+    > button {
+      @include btn(100%);
+      margin: 30px 0 0;
+    }
+    &__text-down {
+      display: block;
+      text-align: center;
+      padding: 10px 0 0;
+      font-weight: 600;
+    }
+  }
+
+  &__text {
+    color: #fff;
+    display: grid;
+    grid-template-rows: auto;
+    position: relative;
+    max-height: 768px;
+    > span {
+      color: $dark-text;
+      text-transform: uppercase;
+      font: 700 6em/1.2 "Oswald", sans-serif;
+      align-self: center;
+      span {
+        color: #fff;
+        font: 600 .5em/1.2 'Montserrat', sans-serif;
+        text-transform: none;
+      }
+    }
+  }
+}
+.error_message {
+  color: red;
+  text-align: center;
+  display: block;
+  margin: 0 0 10px;
+}
+.loading {
+  position: absolute;
+  top: -17px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+.loading_content{
+  @include alignment();
+  opacity: .2;
+  box-sizing: border-box;
+  padding: 0 0 70px;
+  min-height: 200px;
+  svg {
+    width: 100%;
+    max-height: 200px;
+  }
+}
+
+/*===== User Details ====*/
+.personal {
+  display: grid;
+  grid-template-columns: 300px auto;
+  column-gap: 20px;
+
+  h2 {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin: 0 0 -10px;
+  }
+
+  &-avatar {
+    @include box;
+    @include alignment(center);
+
+      &__picture{
+        max-width: 250px;
+        max-height: 250px;
+        width: 80%;
+        height: 80%;
+        overflow: hidden;
+        background: rgba(166,180,207, .3);
+        border-radius: $border-radius;
+        position: relative;
+        @include alignment(center);
+        &-error {
+          position: absolute;
+          bottom: 7px;
+          left: 0;
+          right: 0;
+          text-align: center;
+          color: red;
+          font-size: .8em;
+        }
+
+        &-edit {
+          cursor: pointer;
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(37, 57, 98, 0.1);
+          @include alignment(center);
+          border: 0;
+          width: 100%;
+          transition: all .3s ease;
+
+          &:hover {
+            background: rgba(37, 57, 98, .5);
+          }
+          input {
+            background: none;
+            border: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+          }
+
+          span {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: $blue-text;
+            color: #fff;
+            position: relative;
+            @include alignment(center);
+            svg {
+              width: 20px;
+              height: 20px;
+            }
+            .loading {
+              top: 0;
+              left: 0;
+              @include alignment(center);
+              svg {
+                width: 30px;
+                height: 30px;
+              }
+            }
+          }
+
+        }
+
+        img {
+          object-fit: cover;
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+
+  }
+
+  &-info {
+    padding: 25px 22px 25px;
+    @include box;
+    &__form {
+
+      &__row {
+        position: relative;
+        border-radius: 10px;
+        height: 53px;
+        width: 100%;
+        display: block;
+        padding: 5px 15px;
+        border:1px solid #8893a9;
+        margin: 30px 0 0;
+        .error {
+          color: red;
+          position: absolute;
+          bottom: 2px;
+          left: 10px;
+          font-size: .8em;
+        }
+        label {
+          position: absolute;
+          top: -18px;
+          left: 0;
+          color: $white-text;
+          font-size: .9em;
+        }
+        input {
+          outline: none !important;
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          height: 100%;
+          border: 0;
+          background: none;
+        }
+        &-text {
+          font-weight: 600;
+          color: $dark-text;
+          @include alignment(left);
+          height: 100%;
+        }
+        &-button {
+          display: flex;
+        }
+      }
+      button {
+        position: relative;
+        @include btn(90px);
+        margin: 15px 5px 0 0;
+        height: 45px;
+        font-size: .9em;
+        overflow: hidden;
+        .loading {
+          top: -7px;
+        }
+
+      }
+      .btn__cancel {
+        background: $white-text;
+
+      }
+    }
+  }
+}
