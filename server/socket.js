@@ -8,12 +8,12 @@ module.exports = (io) => {
         // });
         //
         socket.on("task check", idTask => {
-            io.emit("check", idTask);
+            socket.broadcast.emit("check", idTask);
         });
 
-        socket.on("create task", task => {
+        socket.on("task add", task => {
             //console.log("task", task);
-            io.emit("add task", task);
+            socket.broadcast.emit("add", task);
         });
 
 

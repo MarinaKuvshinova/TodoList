@@ -19,6 +19,7 @@ export const Checkbox = ({id, handelChangArchive}) => {
     useEffect(() => {
         socket.on('check', (id) => {
             handelChangArchive(id);
+            console.log("check ", id);
         });
     }, []);
 

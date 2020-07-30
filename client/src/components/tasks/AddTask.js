@@ -1,11 +1,11 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {FaRegListAlt, FaRegCalendarAlt, FaRegTimesCircle, FaPlusCircle, FaRegStar, FaStar, FaRegCommentAlt, FaUsers} from "react-icons/fa";
 import axios from "axios";
 import {useSelectedProjectValue} from "../../context";
 import {ProjectOverlay} from "../projects/ProjectOverlay";
 import {TaskDate} from "./TaskDate";
 import {TaskMessage} from "./TaskMessage";
-import {useOutsideClick} from "../../hooks";
+import {useOutsideClick, useTasks} from "../../hooks";
 import {UsersOverlay} from "./UsersOverlay";
 import socket from "../../socket";
 
@@ -24,8 +24,21 @@ export const AddTask = ({showAddTaskMain = true, shouldShowMain = false, showQui
     const ref = useRef();
     const refInfo = useRef();
     const {selectedProject} = useSelectedProjectValue();
+    const [taskProject, setTaskProject] = useState('');
 
 
+    useEffect(() => {
+        socket.on('add', (task) => {
+            // if (JSON.stringify(task)!== JSON.stringify(taskProject)) {
+            //     handelCreateTask(task);
+            //     setTaskProject(task);
+            // }
+            ///new
+            console.log("task", task);
+            handelCreateTask(task);
+        });
+
+    },[]);
 
 
     const addTask = () => {
@@ -48,7 +61,7 @@ export const AddTask = ({showAddTaskMain = true, shouldShowMain = false, showQui
                     setUsers([]);
                     setShowProjectOverlay(false);
                     setImportant(false);
-                    //await socket.emit("create task", {id, archived: false, projectId, task, date: collatedDate || taskDate, usersTask:users, important, message});
+                    await socket.emit("task add", {id, archived: false, projectId, task, date: collatedDate || taskDate, usersTask:users, important, message});
                     await handelCreateTask({id, archived: false, projectId, task, date: collatedDate || taskDate, usersTask, important, message});
             })
                 .catch(err => console.error(err)))

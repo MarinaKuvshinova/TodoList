@@ -59,7 +59,17 @@ export const Tasks = () => {
        //      //setTasks([...tasks, task]);
        //      console.log("tasks", task);
        //  });
-
+       //  socket.on('add', (task) => {
+       //      // if (JSON.stringify(task)!== JSON.stringify(taskProject)) {
+       //      //     handelCreateTask(task);
+       //      //     setTaskProject(task);
+       //      // }
+       //      ///new
+       //      console.log("tasks before", tasks);
+       //      console.log("task", task);
+       //      console.log("tasks", tasks);
+       //      handelCreateTask(task);
+       //  });
 
 
        return () => socket.disconnect();
@@ -73,9 +83,10 @@ export const Tasks = () => {
 
     const handelCreateTask = newTask => {
         // let list = ;
+        console.log("tasks", tasks);
         setTasks([...tasks, newTask]);
         setArchived(!archived);
-        socket.emit("create task", newTask);
+       // socket.emit("create task", newTask);
     };
 
     const handelDeleteTask = taskId => {
