@@ -1,12 +1,8 @@
-import React, {useEffect} from "react";
+import React from "react";
 import axios from "axios";
 import socket from "../../socket";
-import {useSelectedProjectValue} from "../../context";
 
 export const Checkbox = ({id, handelChangArchive}) => {
-    const {selectedProject} = useSelectedProjectValue();
-
-
    const archiveTask = async (id) => {
        await axios.put(`/task/check/${id}`).then(res => {
            socket.emit("task check", id);
@@ -16,12 +12,12 @@ export const Checkbox = ({id, handelChangArchive}) => {
        });
    };
 
-    useEffect(() => {
-        socket.on('check', (id) => {
-            handelChangArchive(id);
-            console.log("check ", id);
-        });
-    }, []);
+    // useEffect(() => {
+    //     socket.on('check', async (id) => {
+    //         console.log("check ", id);
+    //         await handelChangArchive(id);
+    //     });
+    // }, []);
 
    return (
        <span className="checkbox" onClick={() => archiveTask(id)}/>

@@ -3,14 +3,24 @@ import {Checkbox} from "./Checkbox";
 import React, {useEffect, useState} from "react";
 import {FaCommentAlt, FaStar} from "react-icons/fa";
 import socket from "../../socket";
+import jwtDecode from "jwt-decode";
 
 
 export const Task = ({task, handelChangArchive}) => {
     const [showMessage, setShowMessage] = useState(false);
+    const [userId, setUserId] = useState('');
 
     const handleDate = () => {
         return !moment(task.date, "DD/MM/YYYY").isAfter(moment().subtract(1, 'days'))
     };
+
+    useEffect(() => {
+        socket.emit("join", task.projectId);
+        const token = localStorage.getItem("FBIdToken");
+        const decodedToken = jwtDecode(token);
+        setUserId(decodedToken.user_id);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
 
 
@@ -31,7 +41,7 @@ export const Task = ({task, handelChangArchive}) => {
                     task.usersTask &&
                         <span className="tasks__list__task__avatars">
                             {
-                                task.usersTask.filter(user => user.id !== task.usersTask.userId).map( user => <span className="tasks__list__task__avatars-row" key={user.id}><span className="picture"><img src={user.imageUrl} alt="user avatar"/></span><span className="text">{user.firstName} {user.lastName}</span></span>)
+                                task.usersTask.filter(user => user.id!==userId && user.id !== task.usersTask.userId).map( user => <span className="tasks__list__task__avatars-row" key={user.id}><span className="picture"><img src={user.imageUrl} alt="user avatar"/></span><span className="text">{user.firstName} {user.lastName}</span></span>)
                             }
                         </span>
                 }

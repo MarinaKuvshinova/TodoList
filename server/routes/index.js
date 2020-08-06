@@ -20,7 +20,7 @@ router.get('/user', FBAuth, getUser);
 //tasks
 router.post('/tasks', FBAuth,  tasks);
 router.put('/task/add', FBAuth, taskAdd);
-router.delete('/task/:id', taskDelete);
+router.delete('/task/:id', FBAuth, taskDelete);
 router.put('/task/check/:id', taskCheck);
 
 //projects

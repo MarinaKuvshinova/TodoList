@@ -2,7 +2,6 @@ import {useState, useEffect} from 'react';
 import moment from 'moment';
 import axios from 'axios';
 import {collatedTasksExist, sortTasks} from "../helpers";
-import socket from "../socket";
 
 export const useTasks = (selectedProject, sortType) => {
     const [tasks, setTasks] = useState([]);
@@ -42,18 +41,12 @@ export const useTasks = (selectedProject, sortType) => {
     };
 
     useEffect(() => {
-         // socket.on("add", task => {
-         //     //setTasks([...tasks, task]);
-         //     console.log("tasks", tasks);
-         //     console.log("task", task);
-         //
-         // });
-
         axios.post('/tasks')
             .then( res => {
                 handleTaskAdd(res);
             })
             .catch(error => console.error(error));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedProject]);
 
     return {tasks, archiveTasks, setTasks}
@@ -104,7 +97,9 @@ export const useUser = () => {
                 setUserInfo(newInfo);
             }
         }).catch(err => console.error(err));
-    }, [userInfo]);
+        //было [userInfo]
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     return {userInfo, setUserInfo};
 };
 

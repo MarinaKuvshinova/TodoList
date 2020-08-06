@@ -11,9 +11,21 @@ module.exports = (io) => {
             socket.broadcast.emit("check", idTask);
         });
 
-        socket.on("task add", task => {
-            //console.log("task", task);
-            socket.broadcast.emit("add", task);
+        // socket.on("task add", task => {
+        //     //console.log("task", task);
+        //     socket.broadcast.emit("add", task);
+        // });
+
+
+        socket.on('join', (projectId) => {
+            //console.log(`Socket ${socket.id} joining ${projectId}`);
+            socket.join(projectId);
+        });
+        socket.on('task add', task => {
+            //console.log(task);
+//            console.log(`msg: ${message}, taskId: ${taskId}`);
+            if (task.usersTask.length > 1)
+                socket.broadcast.to(task.projectId).emit('add', task);
         });
 
 

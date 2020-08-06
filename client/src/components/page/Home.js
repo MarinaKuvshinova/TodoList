@@ -1,19 +1,10 @@
-import React, {useEffect} from "react";
-import {ProjectsProvider, useProjectsValue, UserInfoProvider, useSelectedProjectValue} from "../../context";
+import React from "react";
+import {ProjectsProvider, UserInfoProvider} from "../../context";
 import {Header} from "../layout/Header";
 import {Context} from "../layout/Content";
-import socket from "../../socket";
 
 
 export const Home = () => {
-
-    // useEffect(() => {
-    //     socket.emit('join', projects);
-    //     // socket.on('done_task', (id) => {
-    //     //     console.log("taskId", id)
-    //     // });
-    // }, []);
-
     return (
         <ProjectsProvider>
             <UserInfoProvider>

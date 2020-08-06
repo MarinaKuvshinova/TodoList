@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {BrowserRouter as Router, Switch} from 'react-router-dom'
-import {SelectedProjectProvider, useProjectsValue, UserProvider} from "./context";
+import {SelectedProjectProvider, UserProvider} from "./context";
 import {Home} from "./components/page/Home";
 import {SignIn} from "./components/page/SignIn";
 import {SignUp} from "./components/page/SignUp";

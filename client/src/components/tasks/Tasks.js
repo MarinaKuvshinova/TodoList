@@ -12,6 +12,7 @@ import {FaFrown, FaUserPlus} from "react-icons/fa";
 import {Task} from "./Task";
 import {UsersOverlay} from "./UsersOverlay";
 import socket from "../../socket";
+import jwtDecode from "jwt-decode";
 
 
 
@@ -43,6 +44,40 @@ export const Tasks = () => {
     if (collatedTasksExist(selectedProject)) {
         sortFilter = sortingOptions.filter(a => a.sortBy!=='date');
     }
+    useEffect(() => {
+        // socket.on('check', (id) => {
+        //     handelChangArchive(id)
+        // });
+        // console.log(tasks);
+        //  socket.on("add task", task => {
+        //      //setTasks([...tasks, task]);
+        //      console.log("tasks", task);
+        //  });
+        // console.log("tasks before", tasks);
+        //  socket.on('add', (task) => {
+        //      // if (JSON.stringify(task)!== JSON.stringify(taskProject)) {
+        //      //     handelCreateTask(task);
+        //      //     setTaskProject(task);
+        //      // }
+        //      ///new
+        //      console.log("tasks before", tasks);
+        //      console.log("task", task);
+        //      console.log("tasks", tasks);
+        //      handelCreateTask(task);
+        //  });
+
+        socket.on('add', (task) => {
+            const token = localStorage.getItem("FBIdToken");
+            const decodedToken = jwtDecode(token);
+            if (task.usersTask.length > 1 && task.usersTask.filter(e => e.id === decodedToken.user_id))
+                handelCreateTask(task);
+        });
+        socket.on('check', id => {
+            handelChangArchive(id);
+        });
+        return () => socket.disconnect();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
 
     useEffect(() => {
         document.title = `CUBE: ${projectName}`;
@@ -50,43 +85,18 @@ export const Tasks = () => {
 
 
 
-    useEffect(() => {
-        // socket.on('check', (id) => {
-        //     handelChangArchive(id)
-        // });
-       // console.log(tasks);
-       //  socket.on("add task", task => {
-       //      //setTasks([...tasks, task]);
-       //      console.log("tasks", task);
-       //  });
-       //  socket.on('add', (task) => {
-       //      // if (JSON.stringify(task)!== JSON.stringify(taskProject)) {
-       //      //     handelCreateTask(task);
-       //      //     setTaskProject(task);
-       //      // }
-       //      ///new
-       //      console.log("tasks before", tasks);
-       //      console.log("task", task);
-       //      console.log("tasks", tasks);
-       //      handelCreateTask(task);
-       //  });
-
-
-       return () => socket.disconnect();
-    },[]);
-
 
     const handelChangArchive = id => {
-        [...tasks].filter(res => res.id === id).map(res => res.archived = true);
+        setTasks((tasks) =>  {
+            tasks.filter(res => res.id === id).map(res => res.archived = true);
+            return [...tasks];
+        });
         setArchived(!archived);
     };
 
     const handelCreateTask = newTask => {
-        // let list = ;
-        console.log("tasks", tasks);
-        setTasks([...tasks, newTask]);
+        setTasks((tasks) => [...tasks, newTask]);
         setArchived(!archived);
-       // socket.emit("create task", newTask);
     };
 
     const handelDeleteTask = taskId => {

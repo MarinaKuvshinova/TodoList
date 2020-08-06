@@ -85,7 +85,9 @@ exports.taskAdd = async (req, res) => {
 
        await Promise.all(userId.map(async (uid) => {
                await admin.auth().getUser(uid).then(user => db.doc(`/users/${user.email}`).get()).then( user => {
-                   if (!usersTask.includes(user.data()) && user.data().userId!==req.user.userId)  usersTask.push({id: user.data().userId, imageUrl: user.data().imageUrl, firstName: user.data().firstName, lastName: user.data().lastName});
+                   // if (!usersTask.includes(user.data()) && user.data().userId!==req.user.userId)  usersTask.push({id: user.data().userId, imageUrl: user.data().imageUrl, firstName: user.data().firstName, lastName: user.data().lastName});
+
+                   if (!usersTask.includes(user.data()))  usersTask.push({id: user.data().userId, imageUrl: user.data().imageUrl, firstName: user.data().firstName, lastName: user.data().lastName});
                }).catch( err => {
                    console.error(err);
                    return res.status(500).json({error: 'Something wrong with tasks user'});
@@ -100,12 +102,41 @@ exports.taskAdd = async (req, res) => {
 };
 exports.taskDelete = async (req, res) => {
     const taskId = req.params.id;
-    db.collection("tasks").doc(taskId).delete().then( data => {
-        res.send(true);
-    }).catch(err => {
-        res.status(500).json({error: 'Something wrong with task delete'});
-        console.error(err);
-    });
+    const userId = req.user.userId;
+    const lenght = await db.collection("tasks").doc(taskId).get()
+        .then(querySnapshot => {
+            return querySnapshot.data().userId.length;
+        });
+//new
+    if (lenght === 1) {
+        await db.collection("tasks").doc(taskId).delete().then( data => {
+            res.send(true);
+        }).catch(err => {
+            res.status(500).json({error: 'Something wrong with task delete'});
+            console.error(err);
+        });
+    } else {
+        await db.collection("tasks").doc(taskId).update('userId', admin.firestore.FieldValue.arrayRemove(userId)).then( data => {
+            res.send(true);
+        }).catch(err => {
+            res.status(500).json({error: 'Something wrong with task delete'});
+            console.error(err);
+        });
+    }
+//     await db.collection("tasks").doc(taskId).update('userId', admin.firestore.FieldValue.arrayRemove(userId)).then( data => {
+//         res.send(true);
+//     }).catch(err => {
+//         res.status(500).json({error: 'Something wrong with task delete'});
+//         console.error(err);
+//     });
+
+    ///old version
+    // db.collection("tasks").doc(taskId).delete().then( data => {
+    //     res.send(true);
+    // }).catch(err => {
+    //     res.status(500).json({error: 'Something wrong with task delete'});
+    //     console.error(err);
+    // });
 };
 exports.taskCheck = async (req, res) => {
     const taskId = req.params.id;

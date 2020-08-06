@@ -1,20 +1,12 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {useProjectsValue, useSelectedProjectValue} from "../../context";
 import {IndividualProject} from "./IndividualProject";
 import {FaFrown} from "react-icons/fa";
-import {collatedTasksExist} from "../../helpers";
-import socket from '../../socket';
 
-export const Projects =({setActive, active}) => {
+export const Projects =({setActive}) => {
     const {setSelectedProject} = useSelectedProjectValue();
     const {projects} = useProjectsValue();
-    //const {handleUsers} =  useUsersProjectValue();
 
-
-    // console.log(active)
-    // useEffect(() => {
-    //     socket.emit('connection', {projects});
-    // }, []);
 
     return (
             projects.length === 0 ?
@@ -29,7 +21,6 @@ export const Projects =({setActive, active}) => {
                             className = { localStorage.getItem('selectedProject') === project.id ? 'active sidebar__project' : 'sidebar__project' }
                             onClick = { () => {
                                 setActive(project.id);
-                                //handleUsers(project.id);
                                 setSelectedProject(project.id);
                                 localStorage.setItem('selectedProject', project.id);
                             }}

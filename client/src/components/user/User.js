@@ -1,14 +1,10 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {useSelectedProjectValue, useUserInfoValue} from "../../context";
 import {FaPencilAlt} from "react-icons/fa";
 
 export const User = () => {
     const {setSelectedProject} = useSelectedProjectValue();
     const {userInfo} = useUserInfoValue();
-
-    useEffect(() => {
-
-    }, [userInfo]);
 
     return (
         <>

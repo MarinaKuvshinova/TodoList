@@ -46,14 +46,13 @@ export const UsersOverlay = ({setUserTask = false, users, setUsers, showUsersOve
     useEffect(() => {
         if(setUserTask) {
             searchUsers();
-
         }
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[setUserTask]);
+    
     const handleClickAddUserToProject = async (userId) => {
         if (setUserTask) {
             setShowUsersOverlay(false);
-            console.log("user in popup click");
             if (users && users.includes(userId)) {
                 setUsers(users.filter(user => user !== userId));
             } else {
