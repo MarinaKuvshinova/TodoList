@@ -18,6 +18,11 @@ export const UsersOverlay = ({setUserTask = false, users, setUsers, showUsersOve
     //         })
     //         .catch(err => console.error(err));
     // }, [selectedProject]);
+    useEffect(() => {
+
+        socket.emit('join', selectedProject);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
 
     const searchUsers = async (e) => {
@@ -49,7 +54,7 @@ export const UsersOverlay = ({setUserTask = false, users, setUsers, showUsersOve
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[setUserTask]);
-    
+
     const handleClickAddUserToProject = async (userId) => {
         if (setUserTask) {
             setShowUsersOverlay(false);
@@ -61,14 +66,18 @@ export const UsersOverlay = ({setUserTask = false, users, setUsers, showUsersOve
         } else {
             //добавление пользователя в проект
             setShowUsersOverlay(false);
-            socket.emit('join', {userId, selectedProject});
+
+            // await socket.emit('join', selectedProject);
             await axios.put('/users/add/project', {userId, selectedProject})
                 .then( res => {
-                    console.log("Add to project User", res.data);
+                    //console.log("Add to project User", res.data);
+                    socket.emit('project', res.data);
+
                 })
                 .catch(err => console.error(err));
             setUserAdd('');
             setUserSearch([]);
+
         }
     };
 

@@ -8,12 +8,12 @@ import {HeaderTop} from "../layout/HeaderTop";
 import {ArchiveTask} from './ArchiveTask';
 import Select from 'react-select';
 import {sortingOptions} from '../../constants';
-import {FaFrown, FaUserPlus} from "react-icons/fa";
+import {FaFrown, FaUserPlus, FaComments} from "react-icons/fa";
 import {Task} from "./Task";
 import {UsersOverlay} from "./UsersOverlay";
 import socket from "../../socket";
 import jwtDecode from "jwt-decode";
-
+import {Chat} from "../chat/Chat";
 
 
 export const Tasks = () => {
@@ -23,7 +23,9 @@ export const Tasks = () => {
     const {tasks, setTasks} = useTasks(selectedProject, sortType);
     const [archived, setArchived] = useState(false);
     const refInfo = useRef();
+    const refChat = useRef();
     const [showUsersOverlay, setShowUsersOverlay] = useState(false);
+    const [showChat, setShowChat] = useState(false);
 
     let projectName = '';
     let sortFilter = sortingOptions;
@@ -44,6 +46,9 @@ export const Tasks = () => {
     if (collatedTasksExist(selectedProject)) {
         sortFilter = sortingOptions.filter(a => a.sortBy!=='date');
     }
+
+
+
     useEffect(() => {
         // socket.on('check', (id) => {
         //     handelChangArchive(id)
@@ -65,6 +70,7 @@ export const Tasks = () => {
         //      console.log("tasks", tasks);
         //      handelCreateTask(task);
         //  });
+
 
         socket.on('add', (task) => {
             const token = localStorage.getItem("FBIdToken");
@@ -113,6 +119,10 @@ export const Tasks = () => {
         if (showUsersOverlay) setShowUsersOverlay(false);
     });
 
+    useOutsideClick(refChat, () => {
+        if (showChat) setShowChat(false);
+    });
+
     return (
         <div className="tasks">
             <HeaderTop projectName={projectName} showAddTask={!collatedTasksExist(selectedProject)} handelCreateTask={handelCreateTask} />
@@ -123,14 +133,24 @@ export const Tasks = () => {
                                     {
                                         !collatedTasksExist(selectedProject) &&
                                         (
-                                            <span ref={refInfo} className={showUsersOverlay ? "active" : undefined}>
-                                                <span className="add-task__user"
-                                                      onClick={() => setShowUsersOverlay(!showUsersOverlay)}
-                                                >
-                                                    <FaUserPlus/>
+                                            <>
+                                                <span ref={refInfo} className={showUsersOverlay ? "active" : undefined}>
+                                                    <span className="add-task__user"
+                                                          onClick={() => setShowUsersOverlay(!showUsersOverlay)}
+                                                    >
+                                                        <FaUserPlus/>
+                                                    </span>
+                                                    <UsersOverlay setShowUsersOverlay={setShowUsersOverlay} showUsersOverlay={showUsersOverlay}/>
                                                 </span>
-                                                <UsersOverlay setShowUsersOverlay={setShowUsersOverlay} showUsersOverlay={showUsersOverlay}/>
-                                            </span>
+                                                <span ref={refChat} className="chat">
+                                                    <span className="chat__ico"
+                                                          onClick={() => setShowChat(!showChat)}
+                                                    >
+                                                        <FaComments/>
+                                                    </span>
+                                                    <Chat setShowChat={setShowChat} showChat={showChat}/>
+                                                </span>
+                                            </>
                                         )
                                     }
                                     <div className="tasks__sort">
@@ -166,16 +186,27 @@ export const Tasks = () => {
                                 {
                                     !collatedTasksExist(selectedProject) &&
                                     (
-                                        <span ref={refInfo} className={showUsersOverlay ? "active" : undefined}>
-                                                <span className="add-task__user"
-                                                      onClick={() => setShowUsersOverlay(!showUsersOverlay)}
-                                                >
-                                                    <FaUserPlus/>
+                                        <>
+                                                <span ref={refInfo} className={showUsersOverlay ? "active" : undefined}>
+                                                    <span className="add-task__user"
+                                                          onClick={() => setShowUsersOverlay(!showUsersOverlay)}
+                                                    >
+                                                        <FaUserPlus/>
+                                                    </span>
+                                                    <UsersOverlay setShowUsersOverlay={setShowUsersOverlay} showUsersOverlay={showUsersOverlay}/>
                                                 </span>
-                                                <UsersOverlay setShowUsersOverlay={setShowUsersOverlay} showUsersOverlay={showUsersOverlay}/>
-                                            </span>
+                                            <span ref={refChat} className="chat">
+                                                    <span className="chat__ico"
+                                                          onClick={() => setShowChat(!showChat)}
+                                                    >
+                                                        <FaComments/>
+                                                    </span>
+                                                    <Chat setShowChat={setShowChat} showChat={showChat}/>
+                                                </span>
+                                        </>
                                     )
                                 }
+                                <div className="tasks__sort">&nbsp;</div>
                             </div>
                             <div className="tasks-no">
                                 <span>You don't have tasks for  this collection</span>

@@ -3,15 +3,18 @@ import axios from "axios";
 import {useProjectsValue} from "../../context";
 import {FaPlusCircle} from "react-icons/fa";
 
+
 export const AddProject = ({shouldShow = false}) => {
     const [show, setShow] = useState(shouldShow);
     const [projectName, setProjectName] = useState('');
     const {projects, setProjects} = useProjectsValue();
 
+
+
     const addProject = () => {
         projectName &&
             axios.put('/project/add', { name: projectName })
-                .then( () => {
+                .then( (data) => {
                     setProjects([...projects]);
                     setProjectName('');
                     setShow(false);

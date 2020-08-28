@@ -28,8 +28,14 @@ exports.usersAddProject = async (req, res) => {
 
     await db.doc(`/projects/${selectProject}`).update({
         userId: admin.firestore.FieldValue.arrayUnion(userAdd)
-    }).then(data => {
-        res.send(data);
+    }).then(async data => {
+       const project = await db.doc(`/projects/${selectProject}`).get();
+       const projectDate = {
+           id: selectProject,
+           ...project.data()
+       };
+
+       await res.send(projectDate);
     }).catch(err => {
         res.status(500).json({error: 'Something wrong with add users to project'});
         console.error(err);

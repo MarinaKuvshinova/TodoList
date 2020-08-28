@@ -15,6 +15,7 @@ export const IndividualProject = ({project}) => {
               setSelectedProject('INBOX');
           })
           .catch(err => console.error(err));
+
   };
 
   return(

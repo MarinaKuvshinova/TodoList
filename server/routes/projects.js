@@ -33,6 +33,7 @@ exports.projectAdd = async (req, res) => {
         name: req.body.name,
         userId: [req.user.userId]
     };
+
     await db.collection("projects").add(project).then( data => {
         res.send(true);
     }).catch(err => {
@@ -46,19 +47,46 @@ exports.projectDelete = async (req, res) => {
     const user = req.user.userId;
 
     const users = await db.doc(`/projects/${projectId}`).get();
-
     if (users.data().userId.length > 1) {
         await db.collection("projects").doc(projectId).update({
             userId: admin.firestore.FieldValue.arrayRemove(user)
-        }).then( () =>
-            res.send(true)
-        ).catch(err => {
+        }).then(async() => {
+            await db.collection('tasks').where("projectId", "==", projectId).where('userId', "array-contains", user).get().then(data => {
+                data.docs.forEach(doc => {
+                    if (doc.data().userId.length === 1) {
+                        doc.ref.delete();
+                    } else {
+                        //проверить
+                        doc.ref.update({userId: admin.firestore.FieldValue.arrayRemove(user)});
+                        console.log(doc.data().userId.length);
+                    }
+                });
+            });
+
+
+            // db.collection('tasks').where("projectId", "==", projectId).where('userId', "array-contains", user).get().then((querySnapshot) => {
+            //     querySnapshot.docs.forEach(data => {
+            //         console.log(data.ref)
+            //     });
+                // querySnapshot.docs.forEach(doc => {
+                //
+                //
+                //     // doc.update({
+                //     //     userId: admin.firestore.FieldValue.arrayRemove(user)});
+                // });
+            // .update({
+            //         userId: admin.firestore.FieldValue.arrayRemove(user)
+            //     })
+            // });
+            res.send(true);
+        }).catch(err => {
             res.status(500).json({error: 'Something wrong with project delete'});
             console.error(err);
         });
     } else {
-        await db.collection("projects").doc(projectId).delete().then( data => {
-            db.collection('tasks').where("projectId", "==", projectId).get().then(querySnapshot => {
+        await db.collection("projects").doc(projectId).delete().then( async data => {
+            await db.collection("chats").doc(projectId).delete();
+            await db.collection('tasks').where("projectId", "==", projectId).get().then(querySnapshot => {
                 querySnapshot.docs.forEach((doc) => {
                     doc.ref.delete();
                 });

@@ -3,6 +3,7 @@ import moment from 'moment';
 import axios from 'axios';
 import {collatedTasksExist, sortTasks} from "../helpers";
 
+
 export const useTasks = (selectedProject, sortType) => {
     const [tasks, setTasks] = useState([]);
     const [archiveTasks, setArchiveTasks] = useState([]);
@@ -54,6 +55,31 @@ export const useTasks = (selectedProject, sortType) => {
 
 export const useProjects = () => {
     const [projects, setProjects] = useState([]);
+
+    // useEffect(() => {
+    //     // console.log("projects", projects);
+    //     socket.on('project', (project) => {
+    //        addProject(projects);
+    //         console.log(projects);
+    //        //setProjects([...projects, project]);
+    //     });
+    // },[]);
+    // //
+    // const addProject = (projects, project) => {
+    //     console.log(projects);
+    //     //setProjects([...projects, project]);
+    //
+    // };
+
+    // useEffect((projects) => {
+    //     socket.on('project', (project) => {
+    //         console.log("project",project);
+    //         console.log("projects",projects);
+    //
+    //         setProjects([...projects, project]);
+    //         // addProject(projects, project);
+    //     });
+    // },[]);
 
     useEffect(() => {
         axios.post('/projects')

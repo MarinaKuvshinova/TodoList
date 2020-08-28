@@ -17,6 +17,8 @@ export const Header = () => {
         }
     }, [selectedProject]);
 
+
+
     return (
         <header className="header">
             <h1 className="header__logo">TODO</h1>
