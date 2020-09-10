@@ -1,15 +1,19 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { FaCalendarTimes, FaCalendarWeek, FaChevronDown, FaCalendarDay, FaCalendarCheck} from 'react-icons/fa';
 import {useSelectedProjectValue} from "../../context";
 import {Projects} from "../projects/Projects"
 import {AddProject} from "../projects/AddProject";
 import {collatedTasksExist} from "../../helpers";
 import {User} from "../user/User";
+import {FaArrowLeft} from "react-icons/fa";
+import {useOutsideClick} from "../../hooks";
 
 export const Header = () => {
     const {setSelectedProject, selectedProject} = useSelectedProjectValue();
     const [active, setActive] = useState(localStorage.getItem('selectedProject').toLowerCase());
     const [showProjects, setShowProjects] = useState(false);
+    const [showMenu, setShowMenu] = useState(false);
+    const refHeader = useRef();
 
     useEffect(()=>{
         if (!collatedTasksExist(selectedProject) && selectedProject !== 'Setting profile' ) {
@@ -17,11 +21,15 @@ export const Header = () => {
         }
     }, [selectedProject]);
 
+    useOutsideClick(refHeader, () => {
+        if (showMenu) setShowMenu(false);
+    });
 
 
     return (
-        <header className="header">
-            <h1 className="header__logo">TODO</h1>
+        <header className={showMenu ? "header open_header" : "header"}  ref={refHeader}>
+            <button onClick={() => setShowMenu(!showMenu)} className="header__open"><FaArrowLeft/></button>
+            <h1 className="header__logo">CUBE</h1>
             <div className="header__holder">
                 <ul className="header__catalog">
                     <li

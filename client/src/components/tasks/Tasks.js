@@ -142,7 +142,7 @@ export const Tasks = () => {
                                                     </span>
                                                     <UsersOverlay setShowUsersOverlay={setShowUsersOverlay} showUsersOverlay={showUsersOverlay}/>
                                                 </span>
-                                                <span ref={refChat} className="chat">
+                                                <span ref={refChat} className={showChat ? "active chat" : "chat"} >
                                                     <span className="chat__ico"
                                                           onClick={() => setShowChat(!showChat)}
                                                     >
@@ -195,7 +195,7 @@ export const Tasks = () => {
                                                     </span>
                                                     <UsersOverlay setShowUsersOverlay={setShowUsersOverlay} showUsersOverlay={showUsersOverlay}/>
                                                 </span>
-                                            <span ref={refChat} className="chat">
+                                            <span ref={refChat} className={showChat ? "active chat" : "chat"}>
                                                     <span className="chat__ico"
                                                           onClick={() => setShowChat(!showChat)}
                                                     >

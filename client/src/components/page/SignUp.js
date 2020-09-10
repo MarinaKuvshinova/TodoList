@@ -53,7 +53,7 @@ export const SignUp = ({ history }) => {
             <form onSubmit = {handleSubmit} className="login__form">
                 <header className="login__form__title">
                     <strong>Sign up</strong>
-                    <span>Welcome to KUBE</span>
+                    <span>Welcome to CUBE</span>
                 </header>
                 {
                     errors.general && (<span className="error_message">{errors.general}</span>)
@@ -84,10 +84,10 @@ export const SignUp = ({ history }) => {
                 <span className="login__form__text-down">Have an account? <Link to="/signIn">Sign In</Link></span>
             </form>
             <div className="login__text">
-                <span>K<span>dfg</span></span>
-                <span>U<span>dfg</span></span>
-                <span>B</span>
-                <span>E</span>
+                <span>C<span>ommand your</span></span>
+                <span>U<span>nique</span></span>
+                <span>B<span>usiness</span></span>
+                <span>E<span>ffectively</span></span>
             </div>
         </main>
     );

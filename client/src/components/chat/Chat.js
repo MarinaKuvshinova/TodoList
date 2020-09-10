@@ -5,7 +5,6 @@ import {useUserInfoValue} from "../../context";
 import axios from "axios";
 import moment from 'moment';
 import ScrollToBottom from 'react-scroll-to-bottom';
-import {css} from "react-select";
 
 export const Chat = ({showChat}) => {
     const [messages, setMessages] = useState('');

@@ -212,6 +212,10 @@ $white-background: #fcfcfc;
   box-sizing: border-box;
   padding: 77px 0 20px 43px;
 
+  &__open {
+    display: none;
+  }
+
   &__holder {
     transition: all .3s ease;
     padding: 0 10px 0 0;
@@ -578,6 +582,11 @@ $white-background: #fcfcfc;
   &__ico {
     font-size: 22px;
     margin: 0 0 0 20px;
+  }
+  &.active {
+   .chat__ico {
+     color: $blue-text;
+   }
   }
 
   &__drop {
@@ -1164,6 +1173,8 @@ $white-background: #fcfcfc;
   grid-template-columns: 1.5fr 1fr;
   min-height: 100vh;
   position: relative;
+
+
   &:before {
     z-index: 0;
     position: absolute;
@@ -1469,5 +1480,140 @@ $white-background: #fcfcfc;
 
       }
     }
+  }
+}
+
+/*===== Media ====*/
+@media only screen and (max-width: 2024px){body{min-width:320px;}}
+@media only screen and (max-width: 980px){
+  .login {
+    &__form {
+      width: 70%;
+    }
+    &__text > span {
+      font-size: 4em;
+    }
+  }
+  .personal {
+    grid-template-columns: 230px auto;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .App {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: "tasks";
+  }
+  .header {
+    position: fixed;
+    top: 0;
+    left: -240px;
+    z-index: 1000;
+    transition: left 1s;
+    bottom: 0;
+    overflow-y: auto;
+    min-height: 10px;
+    padding: 45px 0 20px 20px;
+    grid-template-rows: 75px auto 70px;
+
+    > *:not(.header__open) {
+      opacity: 0;
+      transition: opacity 1s;
+    }
+
+    &.open_header {
+      left: 0;
+      > *:not(.header__open) {
+        opacity: 1;
+      }
+    }
+
+
+    &__open {
+      display: block;
+      position: absolute;
+      top: 20px;
+      right: 12px;
+      border: 0;
+      color: $white-text;
+      margin: 0;
+      padding: 0;
+      background: none;
+      outline: none !important;
+    }
+    &_top {
+      left: 35px;
+      padding: 20px;
+    }
+  }
+  .tasks {
+    padding-left: 55px;
+  }
+}
+@media only screen and (max-width: 700px) {
+  .login__text > span {
+    font-size: 3em;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .login {
+    grid-template-columns: 1fr;
+    &__text {
+      display: none;
+    }
+    &__form {
+      width: 90%;
+      max-width: 350px;
+    }
+  }
+  .personal {
+    grid-template-columns: auto;
+    &-avatar {
+      height: 250px;
+    }
+  }
+}
+@media only screen and (max-width: 500px) {
+  html, body {
+    font-size: 13px;
+  }
+  .tasks .add-task__button-row {
+    flex-wrap: wrap;
+    justify-content: center;
+
+    & ul {
+      margin: 0 0 10px;
+      order: -1;
+      width: 100%;
+      justify-content: flex-end;
+    }
+    & > button {
+      width: 90%;
+      margin: 20px 0 10px;
+    }
+  }
+  .tasks__sort-title {
+    display: none;
+  }
+  .chat__drop {
+    width: 225px;
+  }
+  .tasks .add-task__button-row > ul {
+    position: relative;
+    & > li {
+      position: static;
+    }
+  }
+  .task-date__list, .project-overlay, .task-message {
+    width: 210px;
+  }
+  .task-date__list li {
+    &:first-child {
+      padding-top: 0;
+    }
+  }
+  .react-calendar__navigation button {
+    margin: 0 0 15px;
   }
 }
