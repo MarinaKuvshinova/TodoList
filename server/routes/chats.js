@@ -5,7 +5,6 @@ exports.chatCreate = async (req, res) => {
     const selectProject = req.body.selectedProject;
     await db.collection('chats').doc(selectProject).set({}, { merge: true });
 };
-
 exports.allMessage = async(req, res) => {
     const project = req.body.selectedProject;
     const chat = await db.collection("chats").doc(project).get();
@@ -27,7 +26,6 @@ exports.allMessage = async(req, res) => {
     }
 
 };
-
 exports.sendMessage = async (req, res) => {
     const message = req.body.message;
     const project = req.body.selectedProject;

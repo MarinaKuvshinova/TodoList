@@ -18,10 +18,9 @@ export const sortTasks = (key, order = 'asc') => {
             ? b[key].toUpperCase() : b[key];
 
         let comparison = 0;
-
-        if (varA > varB || varA === "") {
+        if (varA > varB || varA === "" || !varA) {
             comparison = 1;
-        } else if (varA < varB || varB === "") {
+        } else if (varA < varB || varB === "" || !varB) {
             comparison = -1;
         }
 

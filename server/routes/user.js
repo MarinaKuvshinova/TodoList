@@ -147,10 +147,12 @@ exports.uploadImage = (req, res) => {
                         });
                     }
                 });
+                return imageUrl;
 
             })
-            .then(() => {
-                res.json({ message: "image uploaded successfully" });
+            .then((imageUrl) => {
+                res.send(imageUrl);
+                //res.json({ message: "image uploaded successfully" });
             })
             .catch((err) => {
                 console.error(err);

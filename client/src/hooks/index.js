@@ -10,7 +10,7 @@ export const useTasks = (selectedProject, sortType) => {
 //вернуть этот метод
     const handleSort = tasks => {
         if (sortType) {
-            tasks.sort(sortTasks(sortType.sortBy ,sortType.sort));
+            tasks.sort(sortTasks(sortType.sortBy, sortType.sort));
         }
     };
 

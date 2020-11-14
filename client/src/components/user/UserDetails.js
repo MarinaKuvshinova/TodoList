@@ -27,7 +27,8 @@ export const UserDetails = () => {
             setFirstName(userInfo.firstName);
             setLastName(userInfo.lastName);
         }
-    }, [userInfo, projectName, errors, firstName, lastName]);
+    }, [userInfo, projectName, errors, firstName, lastName, imageUrl]);
+
     if(!(errors.firstName==='' && errors.surName==='')) {
         valid = true;
     }
@@ -51,12 +52,13 @@ export const UserDetails = () => {
             const formData = new FormData();
             setLoadingPhoto(true);
             formData.append('image', img, img.name);
-            await axios.post('/user/image', formData).then(() => {
-                setUserInfo({...userInfo, formData});
+            let picture = await axios.post('/user/image', formData).then((data) => {
                 errors.picture = '';
-                setImageUrl(formData);
                 setLoadingPhoto(false);
+                return data.data;
             }).catch(err => console.error(err));
+            setUserInfo({...userInfo, imageUrl:picture});
+            setImageUrl(picture);
         }
     };
 

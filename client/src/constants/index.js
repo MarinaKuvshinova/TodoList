@@ -10,6 +10,6 @@ export const collatedTasks = [
 export const sortingOptions = [
     {value: 'A-Z', label: 'A-Z', sort: 'asc', sortBy: 'task'},
     {value: 'Z-A', label: 'Z-A', sort: 'desc', sortBy: 'task'},
-    {value: `2000-${moment().format("YYYY")}`, label: `2000-${moment().format("YYYY")}`, sort: 'asc', sortBy: 'date'},
-    {value: `${moment().format("YYYY")}-2000`, label: `${moment().format("YYYY")}-2000`, sort: 'desc', sortBy: 'date'},
+    {value: `2000-${moment().format("YYYY")}`, label: `2000-${moment().format("YYYY")}`, sort: 'desc', sortBy: 'date'},
+    {value: `${moment().format("YYYY")}-2000`, label: `${moment().format("YYYY")}-2000`, sort: 'asc', sortBy: 'date'},
 ];

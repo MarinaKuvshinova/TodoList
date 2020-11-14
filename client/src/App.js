@@ -9,11 +9,9 @@ import {PrivateSingIn} from "./components/routes/PrivateSingIn";
 import {PrivateSingUp} from "./components/routes/PrivateSingUp";
 
 export const App = () => {
-
     if (!localStorage.getItem('selectedProject')) {
         localStorage.setItem('selectedProject', 'INBOX');
     }
-
     return (
       <UserProvider>
           <SelectedProjectProvider>

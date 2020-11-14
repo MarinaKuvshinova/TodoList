@@ -101,7 +101,8 @@ export const Tasks = () => {
     };
 
     const handelCreateTask = newTask => {
-        setTasks((tasks) => [...tasks, newTask]);
+        if (selectedProject === newTask.projectId)
+            setTasks((tasks) => [...tasks, newTask]);
         setArchived(!archived);
     };
 

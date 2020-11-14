@@ -21,7 +21,6 @@ export const FormRow = ({name, value, setValue, text, type = 'text', setErrorInp
         activateField();
         const { name, value } = e.target;
         let error;
-        //сделать проверку полей и в бере сделать принятие полей
         switch (name) {
             case 'firstName':
                 error =

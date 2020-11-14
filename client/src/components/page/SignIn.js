@@ -51,9 +51,6 @@ export const SignIn = ({ history }) => {
     if(!(errors.password==='' && errors.email==='')) {
         valid = true;
     }
-
-
-
     return (
         <main className="login">
             <form onSubmit = {handleSubmit} className="login__form">
